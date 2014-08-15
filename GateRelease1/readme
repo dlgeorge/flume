@@ -12,7 +12,8 @@
 
     ---it is not necessary to run makedtopo.py (and it takes a long time to run)
 
-    make .output will compile and run the code.
+    make new     (compile for the first time...to get modules)
+    make .output (will compile and run the code).
 
 3. To compare with flume data, move fort.gauges and setgauges.data into gaugeplotting/ ...or move all of gaugeplotting contents into _output
 

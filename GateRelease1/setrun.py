@@ -83,7 +83,7 @@ def setrun(claw_pkg='digclaw'):
     clawdata.meqn = 5
 
     # Number of auxiliary variables in the aux array (initialized in setaux)
-    clawdata.maux = 5
+    clawdata.maux = 9
 
     # Index of aux array corresponding to capacity function, if there is one:
     clawdata.mcapa = 0
@@ -174,11 +174,11 @@ def setrun(claw_pkg='digclaw'):
     clawdata.order_trans = 0
 
     # Number of waves in the Riemann solution:
-    clawdata.mwaves = 3
+    clawdata.mwaves = 5
 
     # List of limiters to use for each wave family:
     # Required:  len(mthlim) == mwaves
-    clawdata.mthlim = [4,4,4]
+    clawdata.mthlim = [4,4,4,4,4]
 
     # Source terms splitting:
     #   src_split == 0  => no source term (src routine never called)
@@ -227,7 +227,7 @@ def setrun(claw_pkg='digclaw'):
     # This must be a list of length maux, each element of which is one of:
     #   'center',  'capacity', 'xleft', or 'yleft'  (see documentation).
 
-    clawdata.auxtype = ['center','center','yleft','center','center']
+    clawdata.auxtype = ['center','center','yleft','center','center','center','center','center','center']
 
 
     clawdata.tol = -1.0     # negative ==> don't use Richardson estimator
@@ -301,7 +301,7 @@ def setgeo(rundata):
     geodata.dtopofiles = []
     # for moving topography, append lines of the form:
     #   [topotype, minlevel,maxlevel,fname]
-    dtopofile = os.path.join(topopath,'flumedoorsTXYZ_quaddelay.txt')
+    #dtopofile = os.path.join(topopath,'flumedoorsTXYZ_quaddelay.txt')
     #geodata.dtopofiles.append([1,4,4,dtopofile])
 
     # == setqinit.data values ==
