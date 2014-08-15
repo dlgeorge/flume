@@ -213,7 +213,7 @@ def setrun(claw_pkg='digclaw'):
 
 
     # max number of refinement levels:
-    mxnest = 4
+    mxnest = 3
 
     clawdata.mxnest = -mxnest   # negative ==> anisotropic refinement in x,y,t
 
