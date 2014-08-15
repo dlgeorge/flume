@@ -135,12 +135,10 @@ def makegaugeplots():
     gdata = cg.selectgauge(2,datafile="fort.gauge")
     t_quad = gdata['t']
     h_quad = gdata['q1']
-    gdata = cg.selectgauge(2,datafile="fort.gauge_no_door")
-    t_no = gdata['t'] - 0.2
-    h_no = gdata['q1']
+
     l_exp = plotcomparison(0,t02,h02_low,h02_high,[],[])
-    lines = plt.plot(t_no,h_no,'k--',t_quad,h_quad,'k',linewidth=mylinesize)
-    plt.legend(lines,('dam break initiation','simulated gate opening'))
+    lines = plt.plot(t_quad,h_quad,'k',linewidth=mylinesize)
+
     plt.axis([0,10,-0.08,0.8])
     pylab.yticks([0.0,0.2,0.4,0.6,0.79],('0','20','40','60','80'),fontsize=numfont)
     pylab.xticks([.1, 2, 4, 6, 8, 9.9],('','','','','',''),fontsize=numfont)
