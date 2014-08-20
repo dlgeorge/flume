@@ -15,18 +15,18 @@
     make new     (compile for the first time...to get modules)
     make .output (will compile and run the code).
 
-3. To compare with flume data, move fort.gauges and setgauges.data into gaugeplotting/ ...or move all of gaugeplotting contents into _output
+3. To compare with flume data
+      from gaugeplotting/
 
-    from gaugeplotting/ or _output/ :
+      python makegaugeplots.py will plot results at locations in the flume.
 
-    python makegaugeplots.py will plot results at locations in the flume.
-
+          note symlinks for files in case of problems
 
     for help: email dgeorge@usgs.gov
               see clawpack documentation for version 4.x
               see included pdf for background information about the flume experiments
 
-4. To visualize resulst other than gauge comparisons:
+4. To visualize results other than gauge comparisons:
 
     make .plots will make some matplotlib plots.
 

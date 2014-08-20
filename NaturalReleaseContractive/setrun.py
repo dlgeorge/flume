@@ -66,13 +66,13 @@ def setrun(claw_pkg='digclaw'):
     clawdata.xlower = -10.0
     clawdata.xupper =  140.0
 
-    clawdata.ylower =  -6.0
-    clawdata.yupper =   8.0
+    clawdata.ylower =  -2.0
+    clawdata.yupper =   4.0
 
 
     # Number of grid cells:
     clawdata.mx = 150
-    clawdata.my = 28
+    clawdata.my = 12
 
 
     # ---------------
@@ -83,7 +83,7 @@ def setrun(claw_pkg='digclaw'):
     clawdata.meqn = 5
 
     # Number of auxiliary variables in the aux array (initialized in setaux)
-    clawdata.maux = 9
+    clawdata.maux = 10
 
     # Index of aux array corresponding to capacity function, if there is one:
     clawdata.mcapa = 0
@@ -109,8 +109,8 @@ def setrun(claw_pkg='digclaw'):
 
     if clawdata.outstyle==1:
         # Output nout frames at equally spaced times up to tfinal:
-        clawdata.nout = 200
-        clawdata.tfinal = 20.0
+        clawdata.nout = 40
+        clawdata.tfinal = 10. #38910.00
 
     elif clawdata.outstyle == 2:
         # Specify a list of output times.
@@ -124,8 +124,6 @@ def setrun(claw_pkg='digclaw'):
         ntot = 100
         clawdata.iout = [iout, ntot]
 
-
-
     # ---------------------------------------------------
     # Verbosity of messages to screen during integration:
     # ---------------------------------------------------
@@ -134,8 +132,6 @@ def setrun(claw_pkg='digclaw'):
     # at AMR levels <= verbosity.  Set verbosity = 0 for no printing.
     #   (E.g. verbosity == 2 means print only on levels 1 and 2.)
     clawdata.verbosity = 0
-
-
 
     # --------------
     # Time stepping:
@@ -147,15 +143,15 @@ def setrun(claw_pkg='digclaw'):
 
     # Initial time step for variable dt.
     # If dt_variable==0 then dt=dt_initial for all steps:
-    clawdata.dt_initial = 1.e-16
+    clawdata.dt_initial = 1.e-8
 
     # Max time step to be allowed if variable dt used:
     clawdata.dt_max = 1e+99
 
     # Desired Courant number if variable dt used, and max to allow without
     # retaking step with a smaller dt:
-    clawdata.cfl_desired = 0.25
-    clawdata.cfl_max = 0.9
+    clawdata.cfl_desired = 0.4
+    clawdata.cfl_max = 0.5
 
     # Maximum number of time steps to allow between output times:
     clawdata.max_steps = 100000
@@ -218,16 +214,16 @@ def setrun(claw_pkg='digclaw'):
     clawdata.mxnest = -mxnest   # negative ==> anisotropic refinement in x,y,t
 
     # List of refinement ratios at each level (length at least mxnest-1)
-    clawdata.inratx = [5,5,2,4]
-    clawdata.inraty = [5,5,2,4]
-    clawdata.inratt = [5,5,2,4]
+    clawdata.inratx = [5,5]
+    clawdata.inraty = [5,5]
+    clawdata.inratt = [5,5]
 
 
     # Specify type of each aux variable in clawdata.auxtype.
     # This must be a list of length maux, each element of which is one of:
     #   'center',  'capacity', 'xleft', or 'yleft'  (see documentation).
 
-    clawdata.auxtype = ['center','center','yleft','center','center','center','center','center','center']
+    clawdata.auxtype = ['center','center','yleft','center','center','center','center','center','center','center']
 
 
     clawdata.tol = -1.0     # negative ==> don't use Richardson estimator
@@ -271,12 +267,12 @@ def setgeo(rundata):
 
     # == settsunami.data values ==
     geodata.sealevel = -1000.0
-    geodata.drytolerance = 1.e-6
+    geodata.drytolerance = 1.e-4
     geodata.wavetolerance = 5.e-2
     geodata.depthdeep = 1.e2
     geodata.maxleveldeep = 1
     geodata.ifriction = 0
-    geodata.coeffmanning = 0.000
+    geodata.coeffmanning = 0.0
     geodata.frictiondepth = 10000.0
 
     # == settopo.data values ==
@@ -288,12 +284,12 @@ def setgeo(rundata):
     topofile1=os.path.join(topopath,'ZeroTopo.tt2')
     topofile2=os.path.join(topopath,'Wall1Topo.tt2')
     topofile3=os.path.join(topopath,'Wall2Topo.tt2')
-    topofile4=os.path.join(topopath,'ZeroTopoGate.tt2')
+    topofile4=os.path.join(topopath,'NatReleaseTopo.tt2')
 
     geodata.topofiles.append([2, 1, 3, 0.0, 1.e10, topofile1])
     geodata.topofiles.append([2, 2, 3, 0.0, 1.e10, topofile2])
     geodata.topofiles.append([2, 2, 3, 0.0, 1.e10, topofile3])
-    geodata.topofiles.append([2, 4, 4, 0.0, 5.0, topofile4])
+    geodata.topofiles.append([2, 2, 3, 0.0, 1.e10, topofile4])
 
 
     # == setdtopo.data values ==
@@ -301,8 +297,8 @@ def setgeo(rundata):
     geodata.dtopofiles = []
     # for moving topography, append lines of the form:
     #   [topotype, minlevel,maxlevel,fname]
-    #dtopofile = os.path.join(topopath,'flumedoorsTXYZ_quaddelay.txt')
-    #geodata.dtopofiles.append([1,4,4,dtopofile])
+
+    #geodata.dtopofiles.append([1,3,3,'subfault.tt1'])
 
     # == setqinit.data values ==
     geodata.qinitfiles = []
@@ -315,7 +311,6 @@ def setgeo(rundata):
         #n=meqn+1: surface elevation eta is defined by the file and results in h=max(eta-b,0)
 
     geodata.qinitfiles.append([2,6,3,3,'topo/FlumeQinit.tt2'])
-    #geodata.qinitfiles.append([2,4,3,3,'topo/FlumeQinit_m.tt2'])
 
     # == setauxinit.data values ==
     geodata.auxinitfiles = []
@@ -326,22 +321,29 @@ def setgeo(rundata):
     #The following values are allowed for iauxinit:
         #n=1,maux perturbation of aux(i,j,n)
 
-    geodata.auxinitfiles.append([2,4,1,5,'aux/FlumePhi.tt2'])
+    #geodata.auxinitfiles.append([2,4,1,5,'aux/FlumePhi.tt2'])
     geodata.auxinitfiles.append([2,5,1,5,'aux/FlumeTheta.tt2'])
 
     # == setregions.data values ==
     geodata.regions = []
     # to specify regions of refinement append lines of the form
     #  [minlevel,maxlevel,t1,t2,x1,x2,y1,y2]
-    #geodata.regions.append([4,4,0.,1e10,-5,5,0,2])
+    geodata.regions.append([3,3,0.0,12.0,-6.0,3.0,0.0,2.0])
 
     # == setgauges.data values ==
     geodata.gauges = []
     # for gauges append lines of the form  [gaugeno, x, y, t0, tf]
-    geodata.gauges.append([2, 2.0, 1.0, 0.0, 60e3])
-    geodata.gauges.append([32, 32.0, 1.0, 0.0, 60e3])
-    geodata.gauges.append([66, 66.0, 1.0, 0.0, 60e3])
-    geodata.gauges.append([90, 90.0, 1.0, 0.0, 60e3])
+    x0 = -3.601
+    xend = 5.0
+    ngs = 9*5*5
+    xgs = np.linspace(x0,xend,ngs)
+
+    x0 = 5.01
+    xend = 70.0
+    ngs = 100
+    xgs = np.hstack((xgs,np.linspace(x0,xend,ngs)))
+    for ixgs in xrange(len(xgs)):
+        geodata.gauges.append([ixgs+1, xgs[ixgs], 1.0, 0.0, 10.5])
 
     # == setfixedgrids.data values ==
     geodata.fixedgrids = []
@@ -377,35 +379,35 @@ def setdig(rundata):
         raise AttributeError("Missing digdata attribute")
 
     #set non-default values if needed
+    digdata.delta = 0.001
     digdata.c1 = 1.0
-    digdata.rho_f = 1100.0
-    digdata.phi_bed = 40.7
-    digdata.phi_int = 40.7
-    digdata.mu = 0.005
-    digdata.m0 = 0.61
-    digdata.m_crit = 0.63
-    digdata.delta = 0.00155
-    permeability = 0.5e-8
-    #digdata.kappita = np.sqrt(permeability*180.*digdata.m0**2/((1.0-digdata.m0)**3))
-    #digdata.kappita = np.sqrt(permeability*40.0)
-    digdata.kappita = permeability*np.exp((digdata.m0-0.60)/(0.04))
-    digdata.alpha_c = 0.05
+    digdata.rho_f = 1000.0
+    digdata.phi_bed = 38. #Note: this is set by makeaux.py. listed here as reference only
+    digdata.theta_input = 0.
+    digdata.mu = 1.e-3
+    digdata.m0 = 0.48
+    digdata.m_crit = 0.56
+    conductivity = 2.50e-4
+    permeability = conductivity*digdata.mu/(digdata.rho_f*9.81)
+    digdata.kappita = permeability*np.exp((digdata.m0-0.6)/(0.04))
+    digdata.alpha_c = 0.3
     digdata.phys_tol = rundata.geodata.drytolerance
     digdata.sigma_0 = 1.e3
     digdata.bed_normal = 1
 
-    digdata.init_ptype = 0
+    digdata.init_ptype = 1
     digdata.init_pmax_ratio = 0.0
-    digdata.init_ptf  = 0.0
+    digdata.init_ptf = 4.0
     digdata.init_ptf2 = 0.0
 
     #-1 =0, 0 = hydro, 1,2 = failure or average failure, 3,4= p(t) to failure or average failure
     #to reduce to shallow water equations, uncomment the following
     #digdata.c1= 0.0
     #digdata.phi_int = 0.0
-    #digdata.phi_bed = 0.0
+    #digdata.theta = 0.0
     #digdata.kappita = 0.0
     #digdata.mu = 0.0
+
 
 
     return rundata
