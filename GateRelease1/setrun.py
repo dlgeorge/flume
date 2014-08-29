@@ -71,7 +71,7 @@ def setrun(claw_pkg='digclaw'):
 
 
     # Number of grid cells:
-    clawdata.mx = 150
+    clawdata.mx = 200
     clawdata.my = 28
 
 
@@ -80,7 +80,7 @@ def setrun(claw_pkg='digclaw'):
     # ---------------
 
     # Number of equations in the system:
-    clawdata.meqn = 5
+    clawdata.meqn = 6
 
     # Number of auxiliary variables in the aux array (initialized in setaux)
     clawdata.maux = 9
@@ -109,7 +109,7 @@ def setrun(claw_pkg='digclaw'):
 
     if clawdata.outstyle==1:
         # Output nout frames at equally spaced times up to tfinal:
-        clawdata.nout = 200
+        clawdata.nout = 20
         clawdata.tfinal = 20.0
 
     elif clawdata.outstyle == 2:
@@ -213,7 +213,7 @@ def setrun(claw_pkg='digclaw'):
 
 
     # max number of refinement levels:
-    mxnest = 3
+    mxnest = 2
 
     clawdata.mxnest = -mxnest   # negative ==> anisotropic refinement in x,y,t
 
@@ -271,7 +271,7 @@ def setgeo(rundata):
 
     # == settsunami.data values ==
     geodata.sealevel = -1000.0
-    geodata.drytolerance = 1.e-6
+    geodata.drytolerance = 1.e-3
     geodata.wavetolerance = 5.e-2
     geodata.depthdeep = 1.e2
     geodata.maxleveldeep = 1
@@ -314,7 +314,7 @@ def setgeo(rundata):
         #n=1,meqn perturbation of q(i,j,n)
         #n=meqn+1: surface elevation eta is defined by the file and results in h=max(eta-b,0)
 
-    geodata.qinitfiles.append([2,6,3,3,'topo/FlumeQinit.tt2'])
+    geodata.qinitfiles.append([2,7,3,3,'topo/FlumeQinit.tt2'])
     #geodata.qinitfiles.append([2,4,3,3,'topo/FlumeQinit_m.tt2'])
 
     # == setauxinit.data values ==
@@ -326,7 +326,7 @@ def setgeo(rundata):
     #The following values are allowed for iauxinit:
         #n=1,maux perturbation of aux(i,j,n)
 
-    geodata.auxinitfiles.append([2,4,1,5,'aux/FlumePhi.tt2'])
+    #geodata.auxinitfiles.append([2,4,1,5,'aux/FlumePhi.tt2'])
     geodata.auxinitfiles.append([2,5,1,5,'aux/FlumeTheta.tt2'])
 
     # == setregions.data values ==
@@ -342,6 +342,7 @@ def setgeo(rundata):
     geodata.gauges.append([32, 32.0, 1.0, 0.0, 60e3])
     geodata.gauges.append([66, 66.0, 1.0, 0.0, 60e3])
     geodata.gauges.append([90, 90.0, 1.0, 0.0, 60e3])
+    geodata.gauges.append([80, 80.0, 1.0, 0.0, 60e3])
 
     # == setfixedgrids.data values ==
     geodata.fixedgrids = []
@@ -379,18 +380,17 @@ def setdig(rundata):
     #set non-default values if needed
     digdata.c1 = 1.0
     digdata.rho_f = 1100.0
-    digdata.phi_bed = 40.7
-    digdata.phi_int = 40.7
+    digdata.rho_s = 2700.0
+    digdata.phi_bed = 40.0
+    digdata.theta_input = 0.0
     digdata.mu = 0.005
     digdata.m0 = 0.61
-    digdata.m_crit = 0.63
-    digdata.delta = 0.00155
-    permeability = 0.5e-8
-    #digdata.kappita = np.sqrt(permeability*180.*digdata.m0**2/((1.0-digdata.m0)**3))
-    #digdata.kappita = np.sqrt(permeability*40.0)
+    digdata.m_crit = 0.64
+    digdata.delta = 1.e-3
+    permeability = 1.e-10
     digdata.kappita = permeability*np.exp((digdata.m0-0.60)/(0.04))
     digdata.alpha_c = 0.05
-    digdata.phys_tol = rundata.geodata.drytolerance
+    digdata.alpha_seg = 1.0
     digdata.sigma_0 = 1.e3
     digdata.bed_normal = 1
 

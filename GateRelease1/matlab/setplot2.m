@@ -49,7 +49,7 @@ PlotType = 13;                % type of plot to produce:
 			     % 3 = Schlieren
 			     % 4 = scatter plot of q vs. r
 
-mq = 2;                      % which component of q to plot
+mq = 5;                      % which component of q to plot
 UserVariable = 0;            % set to 1 to specify a user-defined variable
 UserVariableFile = ' ';      % name of m-file mapping data to q
 MappedGrid = 0;              % set to 1 if mapc2p.m exists for nonuniform grid
@@ -58,9 +58,9 @@ MaxFrames = 1000;            % max number of frames to loop over
 MaxLevels = 6;
 PlotData =  [1 1 1 0 0];   % Data on refinement level k is plotted only if
 			     % k'th component is nonzero
-PlotGrid =  [1 1 0 0 0];   % Plot grid lines on each level?
+PlotGrid =  [1  0 0 0];   % Plot grid lines on each level?
 
-PlotGridEdges =  [0 0 0 0 0];  % Plot edges of patches of each grid at
+PlotGridEdges =  [1 1 1 0 0 0];  % Plot edges of patches of each grid at
                                  % this level?
 
 %---------------------------------

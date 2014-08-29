@@ -6,7 +6,7 @@ make some 'artificial' topo surrounding the flume area
 """
 
 import numpy as np
-import geotools.topotools as gt
+import topotools as gt
 import pylab
 import os
 import pdb
@@ -32,6 +32,43 @@ def wallzero(X,Y):
     Z[np.ix_(yind2,xind)] = 1.6
     Z[np.ix_(yind1,xhopperind)] = 2.5
     Z[np.ix_(yind2,xhopperind)] = 2.5
+
+
+
+    return Z
+
+def zero_backstop(X,Y):
+
+    yind1 =  np.where((Y[:,0]>=-0.5)&(Y[:,0]<=0.0))[0]
+    yind2 =  np.where((Y[:,0]>=2.0)&(Y[:,0]<=2.5))[0]
+    xind  =  np.where((X[0,:]>=-15.0)&(X[0,:]<=90.0))[0]
+
+    xbackstopind  =  np.where(X[0,:]<=-4.0)[0]
+    ybackstopind  =  np.where((Y[:,0]>=-0.5)&(Y[:,0]<=2.5))[0]
+
+    Z = np.zeros(np.shape(X))
+
+    Z[np.ix_(ybackstopind,xbackstopind)] = 2.5
+
+    return Z
+
+def wallzero_backstop(X,Y):
+    yind1 =  np.where((Y[:,0]>=-0.5)&(Y[:,0]<=0.0))[0]
+    yind2 =  np.where((Y[:,0]>=2.0)&(Y[:,0]<=2.5))[0]
+    xind  =  np.where((X[0,:]>=-15.0)&(X[0,:]<=82.5))[0]
+    xhopperind = np.where((X[0,:]>=-15.0)&(X[0,:]<=0.0))[0]
+    Z = np.zeros(np.shape(X))
+
+    xbackstopind  =  np.where(X[0,:]<=-4.0)[0]
+    ybackstopind  =  np.where((Y[:,0]>=-0.5)&(Y[:,0]<=2.5))[0]
+
+    Z[np.ix_(yind1,xind)] = 1.6
+    Z[np.ix_(yind2,xind)] = 1.6
+    Z[np.ix_(yind1,xhopperind)] = 2.5
+    Z[np.ix_(yind2,xhopperind)] = 2.5
+
+    Z[np.ix_(ybackstopind,xbackstopind)] = 2.5
+
 
 
 

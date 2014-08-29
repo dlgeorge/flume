@@ -14,6 +14,8 @@ import gaugedata as cg
 import string
 import pylab
 import pdb
+from numpy import ma
+drytol = 1.e-3
 
 mksize = 1
 numfont = 18
@@ -23,11 +25,14 @@ myfigsize=(8,4)
 myfigsize2=(10,3)
 mylinesize = 3
 light_grey = (.5,.5,.5,.4)
-
 rho_f = 1100.00
 rho_s = 2700.00
 theta = 31.0*np.pi/180.0
 grav = 9.81
+gmod = grav*np.cos(theta)
+kappita = 1.e-10
+mu = 0.005
+alpha = 0.05
 
 def makegaugeplots():
 
@@ -160,12 +165,131 @@ def makegaugeplots():
     pylab.xticks([.1, 2, 4, 6, 8, 9.9],('0','2','4','6','8', '10'),fontsize=numfont)
     pylab.yticks([0,2,4,6,8],('0.0','2.0','4.0','6.0','8.0'),fontsize=numfont)
 
+    #m at 32 meters
+    plt.figure(6,myfigsize2)
+    gdata = cg.selectgauge(32,allgaugedata)
+    t = gdata['t']
+    p = gdata['q5']
+    h = gdata['q1']
+    hu = gdata['q2']
+    u = ma.masked_where(h<=drytol, hu/h)
+    shear = ma.masked_where(h<=drytol, 2.0*hu/h**2)
+    m = ma.masked_where(h<=drytol,gdata['q4']/gdata['q1'])
+    rho = (1.0-m)*rho_f + m*rho_s
+    sigma = h*rho*grav*np.cos(theta) - p
+    delta = 0.01
+    S = (shear*0.005)/(2700.*(shear*delta)**2 + sigma)
+    m_eqn = 0.64/(1.+np.sqrt(S))
+    plt.plot(t,m,'b')
+    plt.plot(t,m_eqn,'r')
+    plt.legend(('m','m_eqn'))
 
+    #m at 2 meters
+    plt.figure(7,myfigsize2)
+    gdata = cg.selectgauge(2,allgaugedata)
+    t = gdata['t']
+    p = gdata['q5']
+    h = gdata['q1']
+    hu = gdata['q2']
+    u = ma.masked_where(h<=drytol, hu/h)
+    shear = ma.masked_where(h<=drytol, 2.0*hu/h**2)
+    m = ma.masked_where(h<=drytol,gdata['q4']/gdata['q1'])
+    rho = (1.0-m)*rho_f + m*rho_s
+    sigma = h*rho*grav*np.cos(theta) - p
+    delta = 0.01
+    S = (shear*0.005)/(2700.*(shear*delta)**2 + sigma)
+    m_eqn = 0.64/(1.+np.sqrt(S))
+    plt.plot(t,m,'b')
+    plt.plot(t,m_eqn,'r')
+    plt.legend(('m','m_eqn'))
 
+    #m at 66 meters
+    plt.figure(8,myfigsize2)
+    gdata = cg.selectgauge(66,allgaugedata)
+    t = gdata['t']
+    p = gdata['q5']
+    h = gdata['q1']
+    hu = gdata['q2']
+    u = ma.masked_where(h<=drytol, hu/h)
+    shear = ma.masked_where(h<=drytol, 2.0*hu/h**2)
+    m = ma.masked_where(h<=drytol,gdata['q4']/gdata['q1'])
+    rho = (1.0-m)*rho_f + m*rho_s
+    sigma = h*rho*grav*np.cos(theta) - p
+    delta = 0.01
+    S = (shear*0.005)/(2700.*(shear*delta)**2 + sigma)
+    m_eqn = 0.64/(1.+np.sqrt(S))
+    plt.plot(t,m,'b')
+    plt.plot(t,m_eqn,'r')
+    plt.legend(('m','m_eqn'))
+
+    #p_eq at 32 meters
+    plt.figure(9,myfigsize2)
+    gdata = cg.selectgauge(2,allgaugedata)
+    t = gdata['t']
+    p = gdata['q5']
+    h = gdata['q1']
+    hu = gdata['q2']
+    u = ma.masked_where(h<=drytol, hu/h)
+    vnorm = u
+    shear = ma.masked_where(h<=drytol, 2.0*hu/h**2)
+    m = ma.masked_where(h<=drytol,gdata['q4']/gdata['q1'])
+    rho = (1.0-m)*rho_f + m*rho_s
+    sigma = h*rho*grav*np.cos(theta) - p
+    delta = 0.01
+    S = (shear*mu)/(2700.*(shear*delta)**2 + sigma)
+    m_eqn = 0.64/(1.+np.sqrt(S))
+    compress = alpha/(m*(sigma +  1.e3))
+    zeta = 3.0/(compress*h*2.0)  + (rho-rho_f)*rho_f*gmod/(4.0*rho)
+    kperm = kappita*np.exp(-(m-0.60)/(0.04))
+    krate=-zeta*2.0*kperm/(h*max(mu,1.e-16))
+    p_hydro = h*rho_f*gmod
+    tanpsi=(m-m_eqn)*np.tanh(shear/0.1)
+    p_eq = p_hydro + 3.0*vnorm*tanpsi/(compress*h*krate)
+    plt.plot(t,p,'k')
+    #plt.plot(t,rho*gmod*h,'r')
+    #plt.plot(t,rho_f*gmod*h,'b')
+    plt.plot(t,p_eq,'r')
+    #plt.legend(('p','p_eqn'))
     #show all plots
+
+
+    #p at 80 meters
+    plt.figure(10,myfigsize2)
+    gdata = cg.selectgauge(80,allgaugedata)
+    t = gdata['t']
+    p = gdata['q5']
+    h = gdata['q1']
+    m = gdata['q4']/gdata['q1']
+    rho = (1.0-m)*rho_f + m*rho_s
+    sigma = h*rho*grav*np.cos(theta)
+    plt.plot(t,p,'k',linewidth=mylinesize)
+    plt.plot(t,sigma,'b')
+    plt.plot(t,rho_f*grav*np.cos(theta)*h,'r')
+    plt.legend(('pore-fluid pressure','lithostatic pressure','hydrostatic pressure'))
+    #plt.axis([0,10,-0.6,9.0])
+    #pylab.xticks([.1, 2, 4, 6, 8, 9.9],('0','2','4','6','8', '10'),fontsize=numfont)
+    #pylab.yticks([0,2,4,6,8],('0.0','2.0','4.0','6.0','8.0'),fontsize=numfont)
+
+    #m at 80 meters
+    plt.figure(11,myfigsize2)
+    gdata = cg.selectgauge(80,allgaugedata)
+    t = gdata['t']
+    p = gdata['q5']
+    h = gdata['q1']
+    hu = gdata['q2']
+    u = ma.masked_where(h<=drytol, hu/h)
+    shear = ma.masked_where(h<=drytol, 2.0*hu/h**2)
+    m = ma.masked_where(h<=drytol,gdata['q4']/gdata['q1'])
+    rho = (1.0-m)*rho_f + m*rho_s
+    sigma = h*rho*grav*np.cos(theta) - p
+    delta = 0.01
+    S = (shear*0.005)/(2700.*(shear*delta)**2 + sigma)
+    m_eqn = 0.64/(1.+np.sqrt(S))
+    plt.plot(t,m,'b')
+    plt.plot(t,m_eqn,'r')
+    plt.legend(('m','m_eqn'))
+
     pylab.show()
-
-
 
 
 def plotcomparison(figno,tf,flumelow,flumehi,tg,gaugevar):

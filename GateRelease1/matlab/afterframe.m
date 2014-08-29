@@ -12,15 +12,16 @@
 %view(2)
 view(2);
 axis on
-axis([-4,4,-1,3])
-axis([69,115,-2,4]);axis equal
+%axis([-4,4,-1,3])
+%axis([69,115,-2,4]);axis equal
 
 
 %for 3d type view
 %set(gca,'PlotBoxAspectRatio',[1 1 1],'DataAspectRatio',[1 1.2 .5])
 %set(gca,'CameraViewAngle',get(gca,'CameraViewAngle')-3)
 %hopperview_bn_gca
-runoutview_gca
+%runoutview_gca
+
 %midview_gca
 %baseview_bn_gca
 %view(2)

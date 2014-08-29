@@ -53,7 +53,7 @@ def setplot(plotdata):
         #yind = np.where(np.abs(Y[0,:]-1.0)<=dy/2.0)[0]
         #xind = np.where(X[:,0]> -1.e10)[0]
 
-        if (current_data.grid.level==3):
+        if (current_data.grid.level==2):
             yind = np.where(np.abs(Y[0,:]-1.0)<=dy)[0]
             xind = np.where(X[:,0]> -1.e10)[0]
         else:
@@ -73,7 +73,7 @@ def setplot(plotdata):
         dy = current_data.dy
         a2dvar = current_data.var
 
-        if (current_data.grid.level==3):
+        if (current_data.grid.level==2):
             yind = np.where(np.abs(Y[0,:]-1.0)<=dy)[0]
             xind = np.where(X[:,0]> -1.e10)[0]
         else:
@@ -90,8 +90,8 @@ def setplot(plotdata):
 
         t=current_data.t
         pylab.title('')
-        pylab.xticks([-5.9,-3,0,2.9],('-6.0','-3.0','0.0','3.0'),fontsize=18)
-        pylab.yticks([0,1.0,1.9],('0.0','1.0','2.0'),fontsize=18)
+        #pylab.xticks([-5.9,-3,0,2.9],('-6.0','-3.0','0.0','3.0'),fontsize=18)
+        #pylab.yticks([0,1.0,1.9],('0.0','1.0','2.0'),fontsize=18)
         pylab.text(-5.5,1.9,'t = %6.2f s'% (t),fontsize=20, style = 'italic', \
             horizontalalignment='left',verticalalignment='top', \
             rotation = 31.0)
@@ -119,7 +119,7 @@ def setplot(plotdata):
 
         #lagrangian dots
 
-        if current_data.grid.level < 3:
+        if current_data.grid.level < 2:
             return current_data
 
         t=current_data.t
@@ -164,6 +164,39 @@ def setplot(plotdata):
 
         return current_data
 
+    # Figure for surface elevation with concentration
+    plotfigure = plotdata.new_plotfigure(name='Surface3', figno=0)
+    plotfigure.kwargs = {'figsize':(9,2.2),'frameon':False}
+    plotfigure.tight_layout = True
+#    plotfigure.clf_each_frame = False
+    # Set up for axes in this figure:
+    plotaxes = plotfigure.new_plotaxes()
+    #plotaxes.xlimits = [-6.0,130]
+    plotaxes.ylimits = [-0.2,2.0]#'auto' #[-.1,2.0]
+    plotaxes.kwargs = {'frameon':'False','axis':'off'}
+    #plotaxes.afteraxes = fixup
+    # Set up for item on these axes: (plot tan depth)
+    plotitem = plotaxes.new_plotitem(plot_type='1d_fill_between_from_2d_data')
+    plotitem.plot_var = digplot.topo
+    plotitem.plot_var2 = digplot.eta
+    plotitem.map_2d_to_1d = q_1d_fill
+    #plotitem.amr_gridlines_show = [1,1,1]
+    plotitem.color = 'tan'
+    # Set up for item on these axes: (plot red fill for coarse concentration)
+    plotitem = plotaxes.new_plotitem(plot_type='1d_fill_between_from_2d_data')
+    plotitem.plot_var = digplot.topo
+    plotitem.plot_var2 = 5
+    plotitem.map_2d_to_1d = q_1d_fill
+    #plotitem.amr_gridlines_show = [1,1,1]
+    plotitem.color = 'red'
+    # Set up for item on these axes: (dark line for topography)
+    plotitem = plotaxes.new_plotitem(plot_type='1d_from_2d_data')
+    plotitem.plot_var = digplot.topo
+    plotitem.map_2d_to_1d = q_1d
+    plotitem.linestyle = '-'
+    plotitem.color = 'black'
+    plotitem.linewidth = 2.0
+    plotitem.show = True
 
 
     # Figure for surface elevation
@@ -219,7 +252,7 @@ def setplot(plotdata):
     plotfigure = plotdata.new_plotfigure(name='Surface_2', figno=2)
     plotaxes = plotfigure.new_plotaxes()
     plotitem = plotaxes.new_plotitem(plot_type='2d_pcolor')
-    plotaxes.xlimits = [-6.0,6.0]
+    plotaxes.xlimits = [-6.0,130.0]
     plotaxes.ylimits = [-2.0,4.0]
     plotitem.plot_var = 0#digplot.pressure_head
     plotitem.pcolor_cmin = 0.0
@@ -227,7 +260,7 @@ def setplot(plotdata):
     plotitem.amr_gridlines_show = [1,1,0]
     #plotitem.amr_gridedges_show = [1 1 1]
 
-    plotitem.show = True
+    plotitem.show = False
 
     # figure of m vs. m_eqn
     plotfigure = plotdata.new_plotfigure(name='meqn', figno=3)
@@ -243,7 +276,7 @@ def setplot(plotdata):
     plotitem.color = 'black'
     plotitem.linewidth = 2.0
     plotaxes.ylimits = [0.5,0.7]
-    plotaxes.xlimits = [-6,70]
+    plotaxes.xlimits = [-6,130]
     plotitem.show = True
 
     # figure of rho
@@ -254,7 +287,7 @@ def setplot(plotdata):
     plotitem.map_2d_to_1d = q_1d
     plotitem.color = 'red'
     plotitem.linewidth = 2.0
-    plotaxes.xlimits = [-6,70]
+    plotaxes.xlimits = [-6,130]
     plotitem.show = False
 
     # figure of Iv
@@ -265,7 +298,7 @@ def setplot(plotdata):
     plotitem.map_2d_to_1d = q_1d
     plotitem.color = 'red'
     plotitem.linewidth = 2.0
-    plotaxes.xlimits = [-6,70]
+    plotaxes.xlimits = [-6,130]
     plotaxes.ylimits = [.00,.0025]
     plotitem.show = True
 
@@ -273,7 +306,7 @@ def setplot(plotdata):
     plotfigure = plotdata.new_plotfigure(name='uv', figno=6)
     plotaxes = plotfigure.new_plotaxes()
     plotitem = plotaxes.new_plotitem(plot_type='1d_from_2d_data')
-    plotitem.plot_var = digplot.shear_strain
+    plotitem.plot_var = digplot.u_velocity
     plotitem.map_2d_to_1d = q_1d
     plotitem.color = 'blue'
     plotitem.linewidth = 2.0
@@ -283,7 +316,7 @@ def setplot(plotdata):
     #plotitem.map_2d_to_1d = q_1d
     #plotitem.color = 'red'
     #plotitem.linewidth = 2.0
-    #plotaxes.xlimits = [-6,70]
+    #plotaxes.xlimits = [-6,130]
     #plotitem.show = True
 
     # figure of pressure
@@ -304,7 +337,7 @@ def setplot(plotdata):
     plotitem.map_2d_to_1d = q_1d
     plotitem.color = 'black'
     plotitem.linewidth = 2.0
-    plotaxes.xlimits = [-6,70]
+    plotaxes.xlimits = [-6,130]
     plotaxes.ylimits = [0,2]
     plotitem.show = True
 
@@ -322,10 +355,11 @@ def setplot(plotdata):
     plotfigure = plotdata.new_plotfigure(name='kperm', figno=9)
     plotaxes = plotfigure.new_plotaxes()
     plotitem = plotaxes.new_plotitem(plot_type='1d_from_2d_data')
-    plotitem.plot_var = digplot.kperm
+    plotitem.plot_var = digplot.kperm_adjusted
     plotitem.map_2d_to_1d = q_1d
     plotitem.color = 'blue'
     plotitem.linewidth = 2.0
+    plotaxes.xlimits = [-6,130]
     plotaxes.ylimits = [1.e-12,1.e-7]
     plotaxes.afteraxes = logscale
 
@@ -337,7 +371,9 @@ def setplot(plotdata):
     plotitem.map_2d_to_1d = q_1d
     plotitem.color = 'blue'
     plotitem.linewidth = 2.0
-    plotaxes.ylimits = [1.e-4,1.e-1]
+    plotaxes.ylimits = [1.e-4,1.e1]
+    plotaxes.xlimits = [-6,140]
+
     plotaxes.afteraxes = logscale
 
 
@@ -346,7 +382,7 @@ def setplot(plotdata):
 
     plotdata.printfigs = True                # print figures
     plotdata.print_format = 'png'            # file format
-    plotdata.print_framenos = np.array(range(0,20))        # list of frames to print
+    plotdata.print_framenos = [0,2,4,6,8,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150]       # list of frames to print
     plotdata.print_fignos = 'all'            # list of figures to print
     plotdata.html = True                     # create html files of plots?
     plotdata.html_homelink = '../README.html'

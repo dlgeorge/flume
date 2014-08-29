@@ -30,6 +30,8 @@
 
     make .plots will make some matplotlib plots.
 
+        above might have some module dependencies ...might be a bit glitchy at first.
+
     matlab can be run from the _output directory.
         make sure  this directory's ./matlab and $CLAW/matlabgeo and  $CLAW/matlab are on your path.
 
