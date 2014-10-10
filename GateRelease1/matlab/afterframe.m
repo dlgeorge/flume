@@ -20,7 +20,7 @@ axis on
 %set(gca,'PlotBoxAspectRatio',[1 1 1],'DataAspectRatio',[1 1.2 .5])
 %set(gca,'CameraViewAngle',get(gca,'CameraViewAngle')-3)
 %hopperview_bn_gca
-%runoutview_gca
+runoutview_gca
 
 %midview_gca
 %baseview_bn_gca

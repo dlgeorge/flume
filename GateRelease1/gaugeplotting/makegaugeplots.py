@@ -81,20 +81,22 @@ def makegaugeplots():
     rho = (1.0-m)*rho_f + m*rho_s
     sigma = h*rho*grav*np.cos(theta)
     plotcomparison(1,t32,h32_low,h32_high,t,h)
-    plt.axis([0,20,-0.05,0.28])
-    pylab.yticks([0.0,0.05,0.10,0.15,0.20,0.25],('0.0','5.0','10.0','15.0','20.0','25.0'),fontsize=numfont)
-    pylab.xticks([.2,5,10,15,19.6],('','','','',''))
+    plt.axis([0,12,-0.05,0.28])
+    #pylab.yticks([0.0,0.05,0.10,0.15,0.20,0.25],('0.0','5.0','10.0','15.0','20.0','25.0'),fontsize=numfont)
+    #pylab.xticks([.2,5,10,15,19.6],('','','','',''))
+    pylab.title('Depth, $h$, at 32 meters')
 
     #p at 32 meters
     gdata = cg.selectgauge(32,allgaugedata)
     plotcomparison(2,t32,pbed32_low,pbed32_high,gdata['t'],1.e-3*gdata['q5'])
     #plt.plot(t32,0.5*(sigma32_low + sigma32_high),'g')
-    #hydroline, = plt.plot(t,1.e-3*rho_f*grav*np.cos(theta)*h,'r',linewidth=1)
+    hydroline, = plt.plot(t,1.e-3*rho_f*grav*np.cos(theta)*h,'r',linewidth=1)
     litholine, = plt.plot(t,1.e-3*sigma,'b',linewidth=1)
-    plt.legend(('pore-fluid pressure','lithostatic pressure'))
-    plt.axis([0,20,-1.2,4.2])
-    pylab.xticks([.2,5,10,15,19.6],('0','5','10','15','20'),fontsize=numfont)
-    pylab.yticks([-1,0.0,1.0,2.0,3.0,4.0],('','0.0','1.0','2.0','3.0','4.0'),fontsize=numfont)
+    plt.legend(('pore-fluid pressure','hydrostatic pressure','lithostatic pressure'))
+    plt.axis([0,12,-1.2,4.2])
+    pylab.title('Fluid pressure head (cm) at 32 m')
+    #pylab.xticks([.2,5,10,15,19.6],('0','5','10','15','20'),fontsize=numfont)
+    #pylab.yticks([-1,0.0,1.0,2.0,3.0,4.0],('','0.0','1.0','2.0','3.0','4.0'),fontsize=numfont)
 
     #sigma at 32 meters
     gdata = cg.selectgauge(32,allgaugedata)
@@ -112,19 +114,21 @@ def makegaugeplots():
     rho = (1.0-m)*rho_f + m*rho_s
     sigma = h*rho*grav*np.cos(theta)
     plt.axis([0,20,-0.05,0.28])
-    pylab.yticks([0.0,0.05,0.10,0.15,0.20,0.25],('','','','','',''))
-    pylab.xticks([.2,5,10,15,19.6],('','','','',''))
+    #pylab.yticks([0.0,0.05,0.10,0.15,0.20,0.25],('','','','','',''))
+    #pylab.xticks([.2,5,10,15,19.6],('','','','',''))
+    pylab.title('Depth, $h$, at 66 m')
 
     #p at 66 meters
     gdata = cg.selectgauge(66,allgaugedata)
     plotcomparison(4,t66,pbed66_low,pbed66_high,gdata['t'],1.e-3*gdata['q5'])
-    #plt.plot(t,1.e-3*rho_f*grav*np.cos(theta)*h,'r')
+    plt.plot(t,1.e-3*rho_f*grav*np.cos(theta)*h,'r')
     plt.plot(t,1.e-3*sigma,'b')
     plt.axis([0,20,-2.0,4.0])
-    plt.legend(('pore-fluid pressure','lithostatic pressure'))
+    plt.legend(('pore-fluid pressure','hydrostatic pressure','lithostatic pressure'))
     plt.axis([0,20,-1.2,4.2])
-    pylab.xticks([.2,5,10,15,19.6],('0','5','10','15','20'),fontsize=numfont)
-    pylab.yticks([-1,0.0,1.0,2.0,3.0,4.0],('','','','','',''))
+    #pylab.xticks([.2,5,10,15,19.6],('0','5','10','15','20'),fontsize=numfont)
+    #pylab.yticks([-1,0.0,1.0,2.0,3.0,4.0],('','','','','',''))
+    pylab.title('Fluid pressure head (cm) at 66 m')
 
     #sigma at 66 meters
     gdata = cg.selectgauge(66,allgaugedata)
@@ -144,10 +148,12 @@ def makegaugeplots():
     l_exp = plotcomparison(0,t02,h02_low,h02_high,[],[])
     lines = plt.plot(t_quad,h_quad,'k',linewidth=mylinesize)
 
-    plt.axis([0,10,-0.08,0.8])
-    pylab.yticks([0.0,0.2,0.4,0.6,0.79],('0','20','40','60','80'),fontsize=numfont)
-    pylab.xticks([.1, 2, 4, 6, 8, 9.9],('','','','','',''),fontsize=numfont)
+    plt.axis([0,12,-0.08,0.8])
+    #pylab.yticks([0.0,0.2,0.4,0.6,0.79],('0','20','40','60','80'),fontsize=numfont)
+    #pylab.xticks([.1, 2, 4, 6, 8, 9.9],('','','','','',''),fontsize=numfont)
+    pylab.title('Depth, $h$ at 2 m')
 
+    """
     #p at 2 meters
     plt.figure(5,myfigsize2)
     gdata = cg.selectgauge(2,allgaugedata)
@@ -245,10 +251,10 @@ def makegaugeplots():
     p_hydro = h*rho_f*gmod
     tanpsi=(m-m_eqn)*np.tanh(shear/0.1)
     p_eq = p_hydro + 3.0*vnorm*tanpsi/(compress*h*krate)
-    plt.plot(t,p,'k')
+    plt.plot(t,1.e-3*p,'k')
     #plt.plot(t,rho*gmod*h,'r')
     #plt.plot(t,rho_f*gmod*h,'b')
-    plt.plot(t,p_eq,'r')
+    plt.plot(t,1.e-3*p_eq,'r')
     #plt.legend(('p','p_eqn'))
     #show all plots
 
@@ -288,6 +294,7 @@ def makegaugeplots():
     plt.plot(t,m,'b')
     plt.plot(t,m_eqn,'r')
     plt.legend(('m','m_eqn'))
+    """
 
     pylab.show()
 

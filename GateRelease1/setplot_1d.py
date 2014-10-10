@@ -382,7 +382,7 @@ def setplot(plotdata):
 
     plotdata.printfigs = True                # print figures
     plotdata.print_format = 'png'            # file format
-    plotdata.print_framenos = [0,2,4,6,8,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150]       # list of frames to print
+    plotdata.print_framenos = 'all' #[0,2,4,6,8,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150]       # list of frames to print
     plotdata.print_fignos = 'all'            # list of figures to print
     plotdata.html = True                     # create html files of plots?
     plotdata.html_homelink = '../README.html'
