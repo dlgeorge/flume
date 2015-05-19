@@ -71,7 +71,7 @@ def setrun(claw_pkg='digclaw'):
 
 
     # Number of grid cells:
-    clawdata.mx = 150
+    clawdata.mx = 200
     clawdata.my = 28
 
 
@@ -109,18 +109,18 @@ def setrun(claw_pkg='digclaw'):
 
     if clawdata.outstyle==1:
         # Output nout frames at equally spaced times up to tfinal:
-        clawdata.nout = 200
-        clawdata.tfinal = 20.0
+        clawdata.nout = 30
+        clawdata.tfinal = 30.0
 
     elif clawdata.outstyle == 2:
         # Specify a list of output times.
-        clawdata.tout =  [0.0,10.0,70.0,600.0,1200.0]
+        clawdata.tout =  [10.0,53.0e3,55.e3]
 
         clawdata.nout = len(clawdata.tout)
 
     elif clawdata.outstyle == 3:
         # Output every iout timesteps with a total of ntot time steps:
-        iout = 1
+        iout = 10
         ntot = 100
         clawdata.iout = [iout, ntot]
 
@@ -277,7 +277,7 @@ def setgeo(rundata):
     geodata.maxleveldeep = 1
     geodata.ifriction = 1
     geodata.coeffmanning = 0.025
-    geodata.frictiondepth = 0.01
+    geodata.frictiondepth = 10.0
 
     # == settopo.data values ==
     # set a path variable for the base topo directory for portability
@@ -289,13 +289,11 @@ def setgeo(rundata):
     topofile2=os.path.join(topopath,'Wall1Topo.tt2')
     topofile3=os.path.join(topopath,'Wall2Topo.tt2')
     topofile4=os.path.join(topopath,'ZeroTopoGate.tt2')
-    topofile5=os.path.join(topopath,'Rigid_Wall.tt2')
 
     geodata.topofiles.append([2, 1, 3, 0.0, 1.e10, topofile1])
     geodata.topofiles.append([2, 2, 3, 0.0, 1.e10, topofile2])
     geodata.topofiles.append([2, 2, 3, 0.0, 1.e10, topofile3])
     geodata.topofiles.append([2, 4, 4, 0.0, 5.0, topofile4])
-    geodata.topofiles.append([2, 1, 4, 0.0, 1.e10, topofile5])
 
 
     # == setdtopo.data values ==
@@ -303,13 +301,13 @@ def setgeo(rundata):
     geodata.dtopofiles = []
     # for moving topography, append lines of the form:
     #   [topotype, minlevel,maxlevel,fname]
-
-    #geodata.dtopofiles.append([1,3,3,'subfault.tt1'])
+    #dtopofile = os.path.join(topopath,'flumedoorsTXYZ_quaddelay.txt')
+    #geodata.dtopofiles.append([1,4,4,dtopofile])
 
     # == setqinit.data values ==
     geodata.qinitfiles = []
     # for qinit perturbations append lines of the form
-    #[qinitftype,iqinit, minlev, maxlev, fname]
+    #   [qinitftype,iqinit, minlev, maxlev, fname]
 
     #qinitftype: file-type, same as topo files, ie: 1, 2 or 3
     #The following values are allowed for iqinit:
@@ -319,11 +317,16 @@ def setgeo(rundata):
     geodata.qinitfiles.append([2,7,3,3,'topo/FlumeQinit.tt2'])
     #geodata.qinitfiles.append([2,4,3,3,'topo/FlumeQinit_m.tt2'])
 
-    #initfile = os.path.join(topopath,slipdir,basename+'_h_m.tt2')
-    #geodata.qinitfiles.append([2,1,3,3,initfile])
+    # == setauxinit.data values ==
+    geodata.auxinitfiles = []
+    # for auxinit perturbations append lines of the form
+    #   [auxinitftype,iauxinit, minlev, maxlev, fname]
 
-    geodata.auxinitfiles=[]
-    #geodata.auxinitfiles.append([2,4,1,5,'aux/FlumePhiVar.tt2'])
+    #auxinitftype: file-type, same as topo files, ie: 1, 2 or 3
+    #The following values are allowed for iauxinit:
+        #n=1,maux perturbation of aux(i,j,n)
+
+    #geodata.auxinitfiles.append([2,4,1,5,'aux/FlumePhi.tt2'])
     geodata.auxinitfiles.append([2,5,1,5,'aux/FlumeTheta.tt2'])
 
     # == setregions.data values ==
@@ -339,6 +342,7 @@ def setgeo(rundata):
     geodata.gauges.append([32, 32.0, 1.0, 0.0, 60e3])
     geodata.gauges.append([66, 66.0, 1.0, 0.0, 60e3])
     geodata.gauges.append([90, 90.0, 1.0, 0.0, 60e3])
+    geodata.gauges.append([80, 80.0, 1.0, 0.0, 60e3])
 
     # == setfixedgrids.data values ==
     geodata.fixedgrids = []
@@ -375,35 +379,36 @@ def setdig(rundata):
 
     #set non-default values if needed
     digdata.c1 = 1.0
-    digdata.rho_f = 1000.0
-    digdata.phi_bed = 36.0
+    digdata.rho_f = 1100.0
+    digdata.rho_s = 2700.0
+    digdata.phi_bed = 40.0
     digdata.theta_input = 0.0
     digdata.mu = 0.005
-    digdata.m0 = 0.62
+    digdata.m0 = 0.56
     digdata.m_crit = 0.64
     digdata.delta = 0.01
-    permeability = 1.e-9
+    permeability = 0.5e-9
     #digdata.kappita = np.sqrt(permeability*180.*digdata.m0**2/((1.0-digdata.m0)**3))
     #digdata.kappita = np.sqrt(permeability*40.0)
     digdata.kappita = permeability*np.exp((digdata.m0-0.60)/(0.04))
-    digdata.alpha_c = .05
-    digdata.sigma_0 = 1000.0
-    digdata.alpha_seg = 0.0
+    digdata.alpha_c = 0.01
+    digdata.alpha_seg = 0.3
+    digdata.sigma_0 = 1.e3
     digdata.bed_normal = 1
+    digdata.phi_seg_coeff = 0.0
 
     digdata.init_ptype = 0
     digdata.init_pmax_ratio = 0.0
     digdata.init_ptf  = 0.0
     digdata.init_ptf2 = 0.0
 
-    #-1 =0, 0 = hydro, 1 = failure, 2= p(t)
+    #-1 =0, 0 = hydro, 1,2 = failure or average failure, 3,4= p(t) to failure or average failure
     #to reduce to shallow water equations, uncomment the following
     #digdata.c1= 0.0
     #digdata.phi_int = 0.0
     #digdata.phi_bed = 0.0
     #digdata.kappita = 0.0
     #digdata.mu = 0.0
-
 
 
     return rundata
