@@ -64,15 +64,15 @@ def setrun(claw_pkg='digclaw'):
     # Lower and upper edge of computational domain:
 
     clawdata.xlower = -10.0
-    clawdata.xupper =  140.0
+    clawdata.xupper =  110.0
 
     clawdata.ylower =  -6.0
     clawdata.yupper =   8.0
 
 
     # Number of grid cells:
-    clawdata.mx = 150
-    clawdata.my = 28
+    clawdata.mx = 120
+    clawdata.my = 14
 
 
     # ---------------
@@ -110,7 +110,7 @@ def setrun(claw_pkg='digclaw'):
     if clawdata.outstyle==1:
         # Output nout frames at equally spaced times up to tfinal:
         clawdata.nout = 200
-        clawdata.tfinal = 20.0
+        clawdata.tfinal = 25.0
 
     elif clawdata.outstyle == 2:
         # Specify a list of output times.
@@ -213,14 +213,14 @@ def setrun(claw_pkg='digclaw'):
 
 
     # max number of refinement levels:
-    mxnest = 2
+    mxnest = 3
 
     clawdata.mxnest = -mxnest   # negative ==> anisotropic refinement in x,y,t
 
     # List of refinement ratios at each level (length at least mxnest-1)
-    clawdata.inratx = [5,5,2,4]
-    clawdata.inraty = [5,5,2,4]
-    clawdata.inratt = [5,5,2,4]
+    clawdata.inratx = [4,5,5]
+    clawdata.inraty = [4,5,5]
+    clawdata.inratt = [4,5,5]
 
 
     # Specify type of each aux variable in clawdata.auxtype.
@@ -276,8 +276,8 @@ def setgeo(rundata):
     geodata.depthdeep = 1.e2
     geodata.maxleveldeep = 1
     geodata.ifriction = 1
-    geodata.coeffmanning = 0.025
-    geodata.frictiondepth = 0.01
+    geodata.coeffmanning = 0.020
+    geodata.frictiondepth = 10.0
 
     # == settopo.data values ==
     # set a path variable for the base topo directory for portability
@@ -289,12 +289,12 @@ def setgeo(rundata):
     topofile2=os.path.join(topopath,'Wall1Topo.tt2')
     topofile3=os.path.join(topopath,'Wall2Topo.tt2')
     topofile4=os.path.join(topopath,'ZeroTopoGate.tt2')
-    topofile5=os.path.join(topopath,'Rigid_Wall.tt2')
+    topofile5=os.path.join(topopath,'Rotating_Wall_10.tt2')
 
-    geodata.topofiles.append([2, 1, 3, 0.0, 1.e10, topofile1])
-    geodata.topofiles.append([2, 2, 3, 0.0, 1.e10, topofile2])
-    geodata.topofiles.append([2, 2, 3, 0.0, 1.e10, topofile3])
-    geodata.topofiles.append([2, 4, 4, 0.0, 5.0, topofile4])
+    geodata.topofiles.append([2, 1, 2, 0.0, 1.e10, topofile1])
+    geodata.topofiles.append([2, 1, 2, 0.0, 1.e10, topofile2])
+    geodata.topofiles.append([2, 1, 2, 0.0, 1.e10, topofile3])
+    geodata.topofiles.append([2, 1, 2, 0.0, 5.0, topofile4])
     geodata.topofiles.append([2, 1, 4, 0.0, 1.e10, topofile5])
 
 
@@ -323,22 +323,27 @@ def setgeo(rundata):
     #geodata.qinitfiles.append([2,1,3,3,initfile])
 
     geodata.auxinitfiles=[]
-    #geodata.auxinitfiles.append([2,4,1,5,'aux/FlumePhiVar.tt2'])
+    geodata.auxinitfiles.append([2,4,1,5,'aux/FlumePhi.tt2'])
     geodata.auxinitfiles.append([2,5,1,5,'aux/FlumeTheta.tt2'])
 
     # == setregions.data values ==
     geodata.regions = []
     # to specify regions of refinement append lines of the form
     #  [minlevel,maxlevel,t1,t2,x1,x2,y1,y2]
-    #geodata.regions.append([4,4,0.,1e10,-5,5,0,2])
+    geodata.regions.append([1,4,0.,1e10,79,96,-10,10])
 
     # == setgauges.data values ==
     geodata.gauges = []
     # for gauges append lines of the form  [gaugeno, x, y, t0, tf]
-    geodata.gauges.append([2, 2.0, 1.0, 0.0, 60e3])
-    geodata.gauges.append([32, 32.0, 1.0, 0.0, 60e3])
+    geodata.gauges.append([33, 33.0, 1.0, 0.0, 60e3])
     geodata.gauges.append([66, 66.0, 1.0, 0.0, 60e3])
-    geodata.gauges.append([90, 90.0, 1.0, 0.0, 60e3])
+    geodata.gauges.append([75, 75.0, 1.0, 0.0, 60e3])
+    geodata.gauges.append([80, 80.0, 1.0, 0.0, 60e3])
+    geodata.gauges.append([88, 88.0, 1.0, 0.0, 60e3])
+    geodata.gauges.append([91, 91.0, 1.0, 0.0, 60e3])
+    geodata.gauges.append([911, 91.17, 1.0, 0.0, 60e3])
+    geodata.gauges.append([918, 91.88, 1.0, 0.0, 60e3])
+    geodata.gauges.append([93, 93.0, 1.0, 0.0, 60e3])
 
     # == setfixedgrids.data values ==
     geodata.fixedgrids = []
@@ -356,8 +361,8 @@ def setgeo(rundata):
     #flowgradevariable: 1=depth, 2= momentum, 3 = sign(depth)*(depth+topo) (0 at sealevel or dry land).
     #flowgradetype: 1 = norm(flowgradevariable), 2 = norm(grad(flowgradevariable))
     #flowgrademinlevel: refine to at least this level if flowgradevalue is exceeded.
-    geodata.flowgrades.append([1.e-6, 2, 1, 3])
-    geodata.flowgrades.append([1.e-6, 1, 1, 3])
+    geodata.flowgrades.append([1.e-6, 2, 1, 4])
+    geodata.flowgrades.append([1.e-6, 1, 1, 4])
 
     return rundata
 
@@ -375,28 +380,30 @@ def setdig(rundata):
 
     #set non-default values if needed
     digdata.c1 = 1.0
-    digdata.rho_f = 1000.0
-    digdata.phi_bed = 36.0
+    digdata.rho_f = 1100.0
+    digdata.rho_s = 2700.0
+    digdata.phi_bed = 38.0
     digdata.theta_input = 0.0
     digdata.mu = 0.005
-    digdata.m0 = 0.62
+    digdata.m0 = 0.60
     digdata.m_crit = 0.64
     digdata.delta = 0.01
-    permeability = 1.e-9
+    permeability = 0.5e-9
     #digdata.kappita = np.sqrt(permeability*180.*digdata.m0**2/((1.0-digdata.m0)**3))
     #digdata.kappita = np.sqrt(permeability*40.0)
     digdata.kappita = permeability*np.exp((digdata.m0-0.60)/(0.04))
-    digdata.alpha_c = .05
-    digdata.sigma_0 = 1000.0
-    digdata.alpha_seg = 0.0
+    digdata.alpha_c = 0.03
+    digdata.alpha_seg = 0.1
+    digdata.sigma_0 = 1.e3
     digdata.bed_normal = 1
+    digdata.phi_seg_coeff = 0.0
 
     digdata.init_ptype = 0
     digdata.init_pmax_ratio = 0.0
     digdata.init_ptf  = 0.0
     digdata.init_ptf2 = 0.0
 
-    #-1 =0, 0 = hydro, 1 = failure, 2= p(t)
+    #-1 =0, 0 = hydro, 1,2 = failure or average failure, 3,4= p(t) to failure or average failure
     #to reduce to shallow water equations, uncomment the following
     #digdata.c1= 0.0
     #digdata.phi_int = 0.0

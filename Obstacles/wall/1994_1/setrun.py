@@ -71,7 +71,7 @@ def setrun(claw_pkg='digclaw'):
 
 
     # Number of grid cells:
-    clawdata.mx = 150
+    clawdata.mx = 200
     clawdata.my = 28
 
 
@@ -109,8 +109,8 @@ def setrun(claw_pkg='digclaw'):
 
     if clawdata.outstyle==1:
         # Output nout frames at equally spaced times up to tfinal:
-        clawdata.nout = 200
-        clawdata.tfinal = 20.0
+        clawdata.nout = 25
+        clawdata.tfinal = 50.0
 
     elif clawdata.outstyle == 2:
         # Specify a list of output times.
@@ -277,7 +277,7 @@ def setgeo(rundata):
     geodata.maxleveldeep = 1
     geodata.ifriction = 1
     geodata.coeffmanning = 0.025
-    geodata.frictiondepth = 0.01
+    geodata.frictiondepth = 10.0
 
     # == settopo.data values ==
     # set a path variable for the base topo directory for portability
@@ -375,28 +375,30 @@ def setdig(rundata):
 
     #set non-default values if needed
     digdata.c1 = 1.0
-    digdata.rho_f = 1000.0
-    digdata.phi_bed = 36.0
+    digdata.rho_f = 1100.0
+    digdata.rho_s = 2700.0
+    digdata.phi_bed = 40.0
     digdata.theta_input = 0.0
     digdata.mu = 0.005
-    digdata.m0 = 0.62
+    digdata.m0 = 0.56
     digdata.m_crit = 0.64
     digdata.delta = 0.01
-    permeability = 1.e-9
+    permeability = 0.5e-9
     #digdata.kappita = np.sqrt(permeability*180.*digdata.m0**2/((1.0-digdata.m0)**3))
     #digdata.kappita = np.sqrt(permeability*40.0)
     digdata.kappita = permeability*np.exp((digdata.m0-0.60)/(0.04))
-    digdata.alpha_c = .05
-    digdata.sigma_0 = 1000.0
-    digdata.alpha_seg = 0.0
+    digdata.alpha_c = 0.01
+    digdata.alpha_seg = 0.1
+    digdata.sigma_0 = 1.e3
     digdata.bed_normal = 1
+    digdata.phi_seg_coeff = 0.0
 
     digdata.init_ptype = 0
     digdata.init_pmax_ratio = 0.0
     digdata.init_ptf  = 0.0
     digdata.init_ptf2 = 0.0
 
-    #-1 =0, 0 = hydro, 1 = failure, 2= p(t)
+    #-1 =0, 0 = hydro, 1,2 = failure or average failure, 3,4= p(t) to failure or average failure
     #to reduce to shallow water equations, uncomment the following
     #digdata.c1= 0.0
     #digdata.phi_int = 0.0

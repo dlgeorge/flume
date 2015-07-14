@@ -109,8 +109,8 @@ def setrun(claw_pkg='digclaw'):
 
     if clawdata.outstyle==1:
         # Output nout frames at equally spaced times up to tfinal:
-        clawdata.nout = 30
-        clawdata.tfinal = 30.0
+        clawdata.nout = 25
+        clawdata.tfinal = 50.0
 
     elif clawdata.outstyle == 2:
         # Specify a list of output times.
@@ -326,7 +326,7 @@ def setgeo(rundata):
     #The following values are allowed for iauxinit:
         #n=1,maux perturbation of aux(i,j,n)
 
-    #geodata.auxinitfiles.append([2,4,1,5,'aux/FlumePhi.tt2'])
+    geodata.auxinitfiles.append([2,4,1,5,'aux/FlumePhi.tt2'])
     geodata.auxinitfiles.append([2,5,1,5,'aux/FlumeTheta.tt2'])
 
     # == setregions.data values ==
@@ -392,7 +392,7 @@ def setdig(rundata):
     #digdata.kappita = np.sqrt(permeability*40.0)
     digdata.kappita = permeability*np.exp((digdata.m0-0.60)/(0.04))
     digdata.alpha_c = 0.01
-    digdata.alpha_seg = 0.3
+    digdata.alpha_seg = 0.0
     digdata.sigma_0 = 1.e3
     digdata.bed_normal = 1
     digdata.phi_seg_coeff = 0.0

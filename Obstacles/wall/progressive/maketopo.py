@@ -100,7 +100,7 @@ def adverse_ramp(X,Y):
     Z[np.ix_(yind,x3ind)] = z5 + np.tan(thetaramp*deg2rad)*(X[np.ix_(yind,x3ind)]-x5)
     Z[np.ix_(yind,x4ind)] = 0.0#z5 + np.tan(thetaramp*deg2rad)*(X[np.ix_(yind,x4ind)]-x5)
 
-    pdb.set_trace()
+    #pdb.set_trace()
 
     return Z
 
@@ -275,6 +275,57 @@ def flume_hm_res(X,Y):
 
     return Z
 
+def adverse_ramp_prog(X,Y):
+
+    thetaramp = 10.0
+    deg2rad = np.pi/180.0
+    flumelen = 78.0
+    flumerad = 10.0
+    theta1 = 31.0
+    theta2 = 2.5
+    theta3 = -thetaramp
+    ramparc = 0.8
+    ramprad = ramparc/((theta2-theta3)*deg2rad)
+
+    
+
+    D2 = flumelen + flumerad*(theta1 - theta2)*deg2rad #start of runout pad
+    D3 = D2 + 8.2 #start of ramp
+
+    xc = D3 #strart of ramp curve
+    zc = ramprad 
+    x5 = xc + ramprad*np.cos(deg2rad*(90.-thetaramp)) #straight ramp
+    z5 = zc - ramprad*np.sin(deg2rad*(90.-thetaramp)) 
+    xend = x5 + (4.7+10.0)*np.cos(deg2rad*thetaramp)
+
+    yind =  np.where((Y[:,0]<=2.5)&(Y[:,0]>=-0.5))[0]
+
+    x1ind = np.where(X[0,:]<D3)[0]
+    x2ind = np.where((X[0,:]>=D3)&(X[0,:]<=x5))[0]
+    x3ind = np.where((X[0,:]>=x5)&(X[0,:]<=xend))[0]
+    x4ind = np.where((X[0,:]>xend)&(X[0,:]<=xend+0.5))[0]
+    x5ind = np.where(X[0,:]>xend+0.5)[0]
+
+    Z=np.zeros(np.shape(X))
+    Z[np.ix_(yind,x2ind)] = zc - np.sqrt(ramprad**2-( X[np.ix_(yind,x2ind)]  -xc)**2)
+    Z[np.ix_(yind,x3ind)] = z5 + np.tan(thetaramp*deg2rad)*(X[np.ix_(yind,x3ind)]-x5)
+    Z[np.ix_(yind,x4ind)] = z5 + np.tan(thetaramp*deg2rad)*(xend-x5)
+    Z[np.ix_(yind,x5ind)] = 0.0
+
+    pdb.set_trace()
+
+    return Z
+
+outfile= 'Rotating_Wall_10.tt2'
+outfile = os.path.join('topo',outfile)
+xlower = 90.0
+xupper = 120.0
+ylower =  -4.0
+yupper =   6.0
+nxpoints = int((xupper-xlower)/0.05) + 1
+nypoints = int((yupper-ylower)/0.05) + 1
+gt.topo2writer(outfile,adverse_ramp_prog,xlower,xupper,ylower,yupper,nxpoints,nypoints)
+
 #flat topo
 outfile= 'ZeroTopo.tt2'
 outfile = os.path.join('topo',outfile)
@@ -284,7 +335,7 @@ ylower = -10.0
 yupper =  10.0
 nxpoints = int((xupper-xlower)/0.1) + 1
 nypoints = int((yupper-ylower)/0.1) + 1
-gt.topo2writer(outfile,zero,xlower,xupper,ylower,yupper,nxpoints,nypoints)
+#gt.topo2writer(outfile,zero,xlower,xupper,ylower,yupper,nxpoints,nypoints)
 
 #flat topo
 outfile= 'ZeroTopoGate.tt2'
@@ -295,7 +346,7 @@ ylower =  0.0
 yupper =  2.0
 nxpoints = int((xupper-xlower)/0.005) + 1
 nypoints = int((yupper-ylower)/0.005) + 1
-gt.topo2writer(outfile,zero,xlower,xupper,ylower,yupper,nxpoints,nypoints)
+#gt.topo2writer(outfile,zero,xlower,xupper,ylower,yupper,nxpoints,nypoints)
 
 #wall topo
 outfile= 'Wall1Topo.tt2'
@@ -306,7 +357,7 @@ ylower =  -0.5
 yupper =  0.0
 nxpoints = int((xupper-xlower)/0.05) + 1
 nypoints = int((yupper-ylower)/0.05) + 1
-gt.topo2writer(outfile,wallzero,xlower,xupper,ylower,yupper,nxpoints,nypoints)
+#gt.topo2writer(outfile,wallzero,xlower,xupper,ylower,yupper,nxpoints,nypoints)
 
 #wall topo
 outfile= 'Wall2Topo.tt2'
@@ -317,7 +368,7 @@ ylower = 2.0
 yupper = 2.5
 nxpoints = int((xupper-xlower)/0.05) + 1
 nypoints = int((yupper-ylower)/0.05) + 1
-gt.topo2writer(outfile,wallzero,xlower,xupper,ylower,yupper,nxpoints,nypoints)
+#gt.topo2writer(outfile,wallzero,xlower,xupper,ylower,yupper,nxpoints,nypoints)
 
 #test initial file
 outfile= 'FlumeQinit.tt2'
@@ -328,7 +379,7 @@ ylower = -1.0
 yupper =  3.0
 nxpoints = int((xupper-xlower)/0.01) + 1
 nypoints = int((yupper-ylower)/0.01) + 1
-gt.topo2writer(outfile,flume_eta,xlower,xupper,ylower,yupper,nxpoints,nypoints)
+#gt.topo2writer(outfile,flume_eta,xlower,xupper,ylower,yupper,nxpoints,nypoints)
 
 #test initial file
 outfile= 'FlumeQinit_res.tt2'
@@ -363,15 +414,6 @@ nxpoints = int((xupper-xlower)/0.01) + 1
 nypoints = int((yupper-ylower)/0.01) + 1
 #gt.topo2writer(outfile,flume_hm_res,xlower,xupper,ylower,yupper,nxpoints,nypoints)
 
-outfile= 'Rigid_Wall.tt2'
-outfile = os.path.join('topo',outfile)
-xlower = 91.1
-xupper = 92.1
-ylower =  -4.0
-yupper =   6.0
-nxpoints = int((xupper-xlower)/0.05) + 1
-nypoints = int((yupper-ylower)/0.05) + 1
-gt.topo2writer(outfile,rigid_wall,xlower,xupper,ylower,yupper,nxpoints,nypoints)
 
 
 

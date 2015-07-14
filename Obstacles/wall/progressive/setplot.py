@@ -52,8 +52,8 @@ def setplot(plotdata):
         #pplt.getp()
         plt.gcf().subplots_adjust(left=0.0,bottom=0.15,right=1.0,top=1.0,wspace = 0.0,hspace=0.0)
         #pylab.tight_layout(0.0,0.0)
-        #pylab.xlim(74,122)
-        #pylab.ylim(-4.0,6.0)
+        pylab.xlim(74,122)
+        pylab.ylim(-4.0,6.0)
         #pylab.xlim(60,130)
         #pylab.ylim(-5.0,7.0)
 
@@ -109,6 +109,26 @@ def setplot(plotdata):
     plotitem.amr_gridlines_show =  [1,0,0,0,0,0]
     plotitem.gridedges_show = 0
 
+    #-----------------------------------------
+    # Figures for gauges
+    #-----------------------------------------
+    plotfigure = plotdata.new_plotfigure(name='Surface & topo', figno=300, \
+                    type='each_gauge')
+    plotfigure.clf_each_gauge = True
+
+    # Set up for axes in this figure:
+    plotaxes = plotfigure.new_plotaxes()
+    #plotaxes.xlimits = [51.5e3,56.5e3]
+    plotaxes.xlimits = 'auto'
+    plotaxes.ylimits = [-1.2,1.2]
+    plotaxes.title = 'Surface'
+
+    # Plot surface:
+    plotitem = plotaxes.new_plotitem(plot_type='1d_plot')
+    plotitem.plot_var = 0
+    plotitem.plotstyle = 'b-'
+    plotitem.show = True
+
 
     #-----------------------------------------
 
@@ -117,7 +137,7 @@ def setplot(plotdata):
 
     plotdata.printfigs = True                # print figures
     plotdata.print_format = 'png'            # file format
-    plotdata.print_framenos = 'all'#[24,25,26,27,28,29,30]#'all'#range(0,120,4)   # range(70,190,10)  # list of frames to print
+    plotdata.print_framenos = range(0,120,10)   # range(70,190,10)  # list of frames to print
     plotdata.print_gaugenos = 'all'            # list of gauges to print
     plotdata.print_fignos = 'all'            # list of figures to print
     plotdata.html = True                     # create html files of plots?
