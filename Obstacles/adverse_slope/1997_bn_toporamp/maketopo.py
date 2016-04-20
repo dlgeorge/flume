@@ -60,9 +60,9 @@ def adverse_ramp(X,Y):
     flumerad = 10.0
     theta1 = 31.0
     theta2 = 2.5
-    theta3 = -29.0
+    theta3 = -30.0
     ramprad = 0.8/((theta2-theta3)*deg2rad)
-    thetaramp= 31.5
+    thetaramp= 32.5
 
     D2 = flumelen + flumerad*(theta1 - theta2)*deg2rad
     D3 = D2 + 8.2
