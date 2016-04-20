@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage{fullpage}
+\title{D-Claw parameters for flume gate-release experiments}
+\begin{document}
+\maketitle
+The following table provides estimated ranges for several important D-Claw parameters, for the gate-release simulation. The parameters are set in the file {\tt setrun.py}, located in the top-level application directory. The ``estimated value'' is based on experimental data and was used in the included publications.
+
+\begin{table}
+\begin{tabular}{|c |c |c | c |c|}
+\hline
+Parameter  &  D-Claw  & Estimated value & Likely range &Plausible range\\
+\hline
+\hline
+Critical solid volume fraction, $m_\mathrm{crit}$ &
+   \tt{digdata.m\_crit} &
+ 0.64 &
+ 0.62 -- 0.66 &
+ 0.55 -- 0.70
+\\ \hline
+Hydraulic permeability, $k$ &
+ \tt{permeability} &
+ $5.0\times 10^{-9}$&
+ $10^{-8}$--$10^{-12}$ &
+ $10^{-5}$--$10^{-13}$
+\\ \hline
+pore-fluid viscosity, $\mu$ &
+ \tt{digdata.mu} &
+ 0.01 &
+ 0.005--0.05 &
+ 0.001--1.0
+\\ \hline
+basal friction angle, $\phi_\mathrm{bed}$ &
+\tt{digdata.phi\_bed} &
+$40.7^\circ$  &
+$38^{\circ}$--$43^\circ$ &
+$32^{\circ}$--$45^\circ$
+\\ \hline
+compressibility constant, $a$ &
+\tt{digdata.alpha\_c}&
+0.03&
+0.01--0.05&
+0.01--0.30
+\\ \hline
+particle segregation factor, $\alpha_\mathrm{seg}$ &
+ \tt{digdata.alpha\_seg}&
+ 1.0&
+ 0.7-1.0 &
+ 0.0-1.0 \\ \hline
+\end{tabular}
+\end{table}
+
+Note that the segregation parameter, controling particle size segregation, is now available in the code but was not used in our model results previously. It is a bit experimental unless it is set to 1.0: setting {\tt digdata.alpha\_seg}=1.0 indicates NO segregation (a bit backwards intuitively). Setting {\tt digdata.alpha\_seg}=0.0 indicates strong segregation.
+
+\end{document}
