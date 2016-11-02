@@ -164,6 +164,8 @@ def setplot(plotdata):
 
         return current_data
 
+    
+
     # Figure for surface elevation with concentration
     plotfigure = plotdata.new_plotfigure(name='Surface3', figno=0)
     plotfigure.kwargs = {'figsize':(9,2.2),'frameon':False}
@@ -207,8 +209,10 @@ def setplot(plotdata):
 
     # Set up for axes in this figure:
     plotaxes = plotfigure.new_plotaxes()
-    plotaxes.xlimits = [-6.0,3.0]
-    plotaxes.ylimits = [-0.2,2.0]#'auto' #[-.1,2.0]
+    #plotaxes.xlimits = [-6.0,3.0]
+    #plotaxes.ylimits = [-0.2,2.0]#'auto' #[-.1,2.0]
+    plotaxes.xlimits = [80.0,113.0]
+    plotaxes.ylimits = [-0.2,2.0]
     plotaxes.kwargs = {'frameon':'False','axis':'off'}
     plotaxes.afteraxes = fixup
 
@@ -252,7 +256,9 @@ def setplot(plotdata):
     plotfigure = plotdata.new_plotfigure(name='Surface_2', figno=2)
     plotaxes = plotfigure.new_plotaxes()
     plotitem = plotaxes.new_plotitem(plot_type='2d_pcolor')
-    plotaxes.xlimits = [-6.0,130.0]
+    #plotaxes.xlimits = [-6.0,130.0]
+    #plotaxes.ylimits = [-2.0,4.0]
+    plotaxes.xlimits = [80,110.0]
     plotaxes.ylimits = [-2.0,4.0]
     plotitem.plot_var = 0#digplot.pressure_head
     plotitem.pcolor_cmin = 0.0
@@ -351,6 +357,7 @@ def setplot(plotdata):
     plotitem.linewidth = 2.0
     plotitem.show = False
 
+    
     # figure of kperm
     plotfigure = plotdata.new_plotfigure(name='kperm', figno=9)
     plotaxes = plotfigure.new_plotaxes()
@@ -375,7 +382,7 @@ def setplot(plotdata):
     plotaxes.xlimits = [-6,140]
 
     plotaxes.afteraxes = logscale
-
+    
 
     # Parameters used only when creating html and/or latex hardcopy
     # e.g., via pyclaw.plotters.frametools.printframes:

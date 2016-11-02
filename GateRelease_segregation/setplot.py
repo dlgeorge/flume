@@ -69,14 +69,66 @@ def setplot(plotdata):
     plotaxes = plotfigure.new_plotaxes('pcolor')
     plotaxes.afteraxes = fixup
     plotaxes.title = ''
+    plotaxes.xlimits=[80,130]
     
 
     # Debris
     plotitem = plotaxes.new_plotitem(plot_type='2d_pcolor')
-    #plotitem.plot_var = dd.particle_size
-    #plotitem.pcolor_cmap =  ld.white2red_colormap
-    plotitem.plot_var = dd.liquefaction_ratio
-    plotitem.pcolor_cmap = ld.oso_debris_colormap_liquefaction
+    plotitem.plot_var = dd.particle_size
+    plotitem.pcolor_cmap =  ld.white2red_colormap
+    #plotitem.plot_var = dd.liquefaction_ratio
+    #plotitem.pcolor_cmap = ld.oso_debris_colormap_liquefaction
+    plotitem.pcolor_cmin = 0.0
+    plotitem.pcolor_cmax = 1.0
+    plotitem.add_colorbar = True
+    plotitem.amr_gridlines_show = [0,0,0,0,0]
+    plotitem.gridedges_show = 0
+    plotitem.show = True
+
+
+    # Land
+    plotitem = plotaxes.new_plotitem(plot_type='2d_pcolor')
+    plotitem.plot_var = ld.land
+    plotitem.pcolor_cmap = ld.runoutpad_colormap
+    plotitem.pcolor_cmin = 0.0
+    plotitem.pcolor_cmax = 0.1
+    plotitem.add_colorbar = False
+    plotitem.amr_gridlines_show = [1,0,0,0,0]
+    plotitem.kwargs = {'linewidths':0.001}
+    plotitem.gridedges_show = 0
+    plotitem.show = True
+
+
+    # add contour lines of depth if desired
+    plotitem = plotaxes.new_plotitem(plot_type='2d_contour')
+    plotitem.show = True
+    plotitem.plot_var = ld.depth
+    plotitem.contour_levels = np.linspace(0.0,0.18,10)
+    plotitem.amr_contour_colors = ['k']  # color on each level
+    plotitem.kwargs = {'linestyles':'solid','linewidths':1}
+    plotitem.amr_contour_show = [0,1,1,1,0]
+    plotitem.amr_gridlines_show =  [1,0,0,0,0,0]
+    plotitem.gridedges_show = 0
+
+        #-----------------------------------------
+    # Figure for pcolor plot
+    #-----------------------------------------
+    plotfigure = plotdata.new_plotfigure(name='pcolor2', figno=1)
+    plotfigure.show = True
+    plotfigure.kwargs = figkwargs
+    # Set up for axes in this figure:
+    plotaxes = plotfigure.new_plotaxes('pcolor')
+    plotaxes.afteraxes = fixup
+    plotaxes.title = ''
+    plotaxes.xlimits=[-6.0,120]
+    
+
+    # Debris
+    plotitem = plotaxes.new_plotitem(plot_type='2d_pcolor')
+    plotitem.plot_var = dd.particle_size
+    plotitem.pcolor_cmap =  ld.white2red_colormap
+    #plotitem.plot_var = dd.liquefaction_ratio
+    #plotitem.pcolor_cmap = ld.oso_debris_colormap_liquefaction
     plotitem.pcolor_cmin = 0.0
     plotitem.pcolor_cmax = 1.0
     plotitem.add_colorbar = True
@@ -117,7 +169,7 @@ def setplot(plotdata):
 
     plotdata.printfigs = True                # print figures
     plotdata.print_format = 'png'            # file format
-    plotdata.print_framenos = 'all'#[24,25,26,27,28,29,30]#'all'#range(0,120,4)   # range(70,190,10)  # list of frames to print
+    plotdata.print_framenos = 'all'#range(10,21)#'all'#range(0,120,4)   # range(70,190,10)  # list of frames to print
     plotdata.print_gaugenos = 'all'            # list of gauges to print
     plotdata.print_fignos = 'all'            # list of figures to print
     plotdata.html = True                     # create html files of plots?
