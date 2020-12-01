@@ -71,7 +71,7 @@ def setrun(claw_pkg='digclaw'):
 
 
     # Number of grid cells:
-    clawdata.mx = 200
+    clawdata.mx = 300
     clawdata.my = 28
 
 
@@ -109,8 +109,8 @@ def setrun(claw_pkg='digclaw'):
 
     if clawdata.outstyle==1:
         # Output nout frames at equally spaced times up to tfinal:
-        clawdata.nout = 25
-        clawdata.tfinal = 50.0
+        clawdata.nout = 20
+        clawdata.tfinal = 20.0
 
     elif clawdata.outstyle == 2:
         # Specify a list of output times.
@@ -271,13 +271,13 @@ def setgeo(rundata):
 
     # == settsunami.data values ==
     geodata.sealevel = -10000.
-    geodata.drytolerance = 1.e-6
+    geodata.drytolerance = 1.e-4
     geodata.wavetolerance = 5.e-2
     geodata.depthdeep = 1.e2
     geodata.maxleveldeep = 1
     geodata.ifriction = 1
-    geodata.coeffmanning = 0.025
-    geodata.frictiondepth = 10.0
+    geodata.coeffmanning = 0.005
+    geodata.frictiondepth = 100.0
 
     # == settopo.data values ==
     # set a path variable for the base topo directory for portability
@@ -381,18 +381,18 @@ def setdig(rundata):
     digdata.c1 = 1.0
     digdata.rho_f = 1100.0
     digdata.rho_s = 2700.0
-    digdata.phi_bed = 40.0
+    digdata.phi_bed = 40.7
     digdata.theta_input = 0.0
-    digdata.mu = 0.005
+    digdata.mu = 0.001
     digdata.m0 = 0.56
     digdata.m_crit = 0.64
-    digdata.delta = 0.01
-    permeability = 0.5e-9
+    digdata.delta = 0.001
+    permeability = 5.0e-9
     #digdata.kappita = np.sqrt(permeability*180.*digdata.m0**2/((1.0-digdata.m0)**3))
     #digdata.kappita = np.sqrt(permeability*40.0)
-    digdata.kappita = permeability*np.exp((digdata.m0-0.60)/(0.04))
+    digdata.kappita = permeability#*np.exp((digdata.m0-0.60)/(0.04))
     digdata.alpha_c = 0.01
-    digdata.alpha_seg = 0.0
+    digdata.alpha_seg = 0.1
     digdata.sigma_0 = 1.e3
     digdata.bed_normal = 1
     digdata.phi_seg_coeff = 0.0
