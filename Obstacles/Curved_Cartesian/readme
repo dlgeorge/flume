@@ -1,0 +1,37 @@
+==== GateRelease1 application =================================================
+
+
+1. Install digclaw4.x as a full clawpack installation. See clawpack documentation for version 4.x.
+
+    should be relatively straightforward as long as $CLAW environment variable is set to the toplevel clawpack directory that includes geoclaw (and includes the D-claw that comes with digclaw4.x).
+
+2. To run code:
+
+    python makeaux.py
+    python maketopo.py
+
+    ---it is not necessary to run makedtopo.py (and it takes a long time to run)
+
+    make new     (compile for the first time...to get modules)
+    make .output (will compile and run the code).
+
+3. To compare with flume data
+      from gaugeplotting/
+
+      python makegaugeplots.py will plot results at locations in the flume.
+
+          note symlinks for files in case of problems
+
+    for help: email dgeorge@usgs.gov
+              see clawpack documentation for version 4.x
+              see included pdf for background information about the flume experiments
+
+4. To visualize results other than gauge comparisons:
+
+    make .plots will make some matplotlib plots.
+
+    matlab can be run from the _output directory.
+        make sure  this directory's ./matlab and $CLAW/matlabgeo and  $CLAW/matlab are on your path.
+
+        matlab>> plotclaw2
+
