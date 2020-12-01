@@ -335,15 +335,16 @@ def setgeo(rundata):
     # == setgauges.data values ==
     geodata.gauges = []
     # for gauges append lines of the form  [gaugeno, x, y, t0, tf]
-    geodata.gauges.append([33, 33.0, 1.0, 0.0, 60e3])
-    geodata.gauges.append([66, 66.0, 1.0, 0.0, 60e3])
-    geodata.gauges.append([75, 75.0, 1.0, 0.0, 60e3])
-    geodata.gauges.append([80, 80.0, 1.0, 0.0, 60e3])
-    geodata.gauges.append([88, 88.0, 1.0, 0.0, 60e3])
-    geodata.gauges.append([91, 91.0, 1.0, 0.0, 60e3])
+    geodata.gauges.append([330, 33.0, 1.0, 0.0, 60e3])
+    geodata.gauges.append([660, 66.0, 1.0, 0.0, 60e3])
+    geodata.gauges.append([750, 75.0, 1.0, 0.0, 60e3])
+    geodata.gauges.append([800, 80.0, 1.0, 0.0, 60e3])
+    geodata.gauges.append([874, 87.4, 1.0, 0.0, 60e3])
+    geodata.gauges.append([895, 89.5, 1.0, 0.0, 60e3])
+    geodata.gauges.append([910, 91.0, 1.0, 0.0, 60e3])
     geodata.gauges.append([911, 91.17, 1.0, 0.0, 60e3])
     geodata.gauges.append([918, 91.88, 1.0, 0.0, 60e3])
-    geodata.gauges.append([93, 93.0, 1.0, 0.0, 60e3])
+    geodata.gauges.append([930, 93.0, 1.0, 0.0, 60e3])
 
     # == setfixedgrids.data values ==
     geodata.fixedgrids = []
@@ -393,7 +394,7 @@ def setdig(rundata):
     #digdata.kappita = np.sqrt(permeability*40.0)
     digdata.kappita = permeability*np.exp((digdata.m0-0.60)/(0.04))
     digdata.alpha_c = 0.03
-    digdata.alpha_seg = 0.1
+    digdata.alpha_seg = 0.0
     digdata.sigma_0 = 1.e3
     digdata.bed_normal = 1
     digdata.phi_seg_coeff = 0.0
